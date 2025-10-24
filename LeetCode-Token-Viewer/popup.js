@@ -1,34 +1,49 @@
-async function getLeetCodeTokens() {
-  try {
-    const cookies = await chrome.cookies.getAll({ domain: "leetcode.com" });
-    const session = cookies.find(c => c.name === "LEETCODE_SESSION");
-    const csrftoken = cookies.find(c => c.name === "csrftoken");
+// Helper function to handle the copy-to-clipboard logic
+function copyToClipboard(text, buttonElement) {
+  if (!text) return; // Don't copy if text is "Not Found"
 
-    const tokenBox = document.getElementById("token");
-    const status = document.getElementById("status");
-    const copyBtn = document.getElementById("copy");
-
-    if (session && csrftoken) {
-      const formatted = `
-        <div><span class="label">Session:</span> ${session.value}</div>
-        <div><span class="label">CSRF Token:</span> ${csrftoken.value}</div>
-      `;
-      tokenBox.innerHTML = formatted;
-
-      copyBtn.onclick = () => {
-        const tokenString = `session=${session.value}; csrftoken=${csrftoken.value}`;
-        navigator.clipboard.writeText(tokenString);
-        status.textContent = "✅ Tokens copied!";
-        setTimeout(() => status.textContent = "", 2000);
-      };
-    } else {
-      tokenBox.textContent = "⚠️ Please log in to leetcode.com first.";
-      copyBtn.disabled = true;
-    }
-  } catch (err) {
-    console.error("Error fetching cookies:", err);
-    document.getElementById("token").textContent = "Error fetching tokens.";
-  }
+  navigator.clipboard.writeText(text).then(() => {
+    // Give visual feedback
+    const originalText = buttonElement.textContent;
+    buttonElement.textContent = 'Copied!';
+    setTimeout(() => {
+      buttonElement.textContent = originalText;
+    }, 2000);
+  }).catch(err => {
+    console.error('Failed to copy text: ', err);
+  });
 }
 
-getLeetCodeTokens();
+// Run this code after the popup.html page has loaded
+document.addEventListener('DOMContentLoaded', () => {
+  const sessionInput = document.getElementById('session-token');
+  const csrfInput = document.getElementById('csrf-token');
+  const sessionCopyBtn = document.getElementById('copy-session');
+  const csrfCopyBtn = document.getElementById('copy-csrf');
+
+  // 1. Send a message to the background script to get the tokens
+  chrome.runtime.sendMessage({ message: 'getTokens' }, (response) => {
+    if (chrome.runtime.lastError) {
+      console.error(chrome.runtime.lastError.message);
+      sessionInput.value = "Error";
+      csrfInput.value = "Error";
+      return;
+    }
+
+    const sessionToken = response.session;
+    const csrfToken = response.csrf;
+
+    // 2. Display the tokens in the input fields
+    sessionInput.value = sessionToken || "Not Found (Are you logged in?)";
+    csrfInput.value = csrfToken || "Not Found (Are you logged in?)";
+
+    // 3. Add click listeners to the copy buttons
+    sessionCopyBtn.addEventListener('click', () => {
+      copyToClipboard(sessionToken, sessionCopyBtn);
+    });
+
+    csrfCopyBtn.addEventListener('click', () => {
+      copyToClipboard(csrfToken, csrfCopyBtn);
+    });
+  });
+});

@@ -3,11 +3,14 @@ const path = require("path");
 
 const LEETCODE_SESSION = "";
 const CSRFTOKEN = "";
+const LEETCODE_SESSION = sessionToken; // Use the session token provided by the user
+const CSRFTOKEN = csrfToken;     // Use the CSRF token provided by the user
 
 const HEADERS = {
   "Content-Type": "application/json",
   "Origin": "https://leetcode.com",
   "User-Agent": "Mozilla/5.0",
+  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36", // More specific User-Agent
   "x-csrftoken": CSRFTOKEN,
   "Cookie": `LEETCODE_SESSION=${LEETCODE_SESSION}; csrftoken=${CSRFTOKEN};`
 };
