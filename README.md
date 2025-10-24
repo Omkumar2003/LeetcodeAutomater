@@ -41,6 +41,17 @@ LeetcodeAutomater
         leet1.jpg
 ```
 
+## 📋 Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+- **Node.js** (v14 or higher) - [Download here](https://nodejs.org/)
+- **Google Chrome** browser
+- **LeetCode Account** - Make sure you're logged in to [LeetCode](https://leetcode.com/)
+- **Git** (optional, for cloning the repository)
+
+---
+
 
 ## 🧑‍💻 How to Run the LeetCodeAutomater
 
@@ -110,7 +121,60 @@ pkg ok.js --targets node18-win-x64  --output LeetcodeAutomater.exe
 This is how the provided executable [LeetcodeAutomater.exe](https://github.com/Omkumar2003/LeetcodeAutomater/releases/download/1.04/LeetcodeAutomater.exe) was created.
 
 
+## 🔧 Troubleshooting
+
+### Common Issues and Solutions:
+
+**Issue 1: Extension not loading in Chrome**
+- Make sure Developer Mode is enabled in `chrome://extensions`
+- Check if you selected the correct folder (LeetCode-Token-Viewer)
+- Try reloading the extension
+
+**Issue 2: "Merge Token not found" error**
+- Ensure you're logged into LeetCode in your browser
+- Open the Chrome Extension and click "Copy Merge Token"
+- The token is only valid while you're logged in
+
+**Issue 3: Node.js errors when running from source**
+- Make sure you have Node.js v14 or higher installed
+- Run `npm install -g pkg` before building
+- Check that all dependencies are installed
+
+**Issue 4: Executable not working**
+- Make sure you've extracted the zip file completely
+- On Mac/Linux, you may need to give execution permission: `chmod +x LeetcodeAutomater.exe`
+- Try running from source instead (Option 2)
+
+If you encounter other issues, please [open an issue](https://github.com/Omkumar2003/LeetcodeAutomater/issues) on GitHub.
+
+---
+
 # ⭐ Support
 
 If you like this project or found it useful, please consider giving it a ⭐ on GitHub!
 Your support motivates further improvements and updates. 💖
+
+---
+
+## 👥 Contributors
+
+We appreciate all the amazing people who have contributed to this project! 🚀
+
+<a href="https://github.com/Omkumar2003/LeetcodeAutomater/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Omkumar2003/LeetcodeAutomater" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
+
+### How to Contribute
+
+We welcome contributions! Here's how you can help:
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/YourFeature`)
+3. Make your changes
+4. Commit your changes (`git commit -m 'Add some feature'`)
+5. Push to the branch (`git push origin feature/YourFeature`)
+6. Open a Pull Request
+
+Please read our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) before contributing.
