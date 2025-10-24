@@ -115,3 +115,17 @@ Run the script with Node:
 ```
 node ok.js
 ```
+<!-- issue-3 of .exe file from ok.js -->
+## Building the Executable
+
+To create a standalone `.exe` file from this project, first install the dependencies:
+
+```bash
+npm install -g pkg
+
+Then, use pkg to build the executable:
+
+pkg --targets node18-win-x64 ok.js
+in leetcodeautomater
+
+This will create an ok.exe file in the root directory.

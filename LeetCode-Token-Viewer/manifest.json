@@ -1,11 +1,19 @@
 {
-  "name": "LeetCode Token Viewer",
-  "description": "Displays your LeetCode session and CSRF tokens locally for manual use.",
-  "version": "1.0",
   "manifest_version": 3,
-  "permissions": ["cookies", "activeTab", "scripting"],
-  "host_permissions": ["https://leetcode.com/*"],
+  "name": "LeetCode Token Viewer",
+  "version": "1.0",
+  "description": "Displays LeetCode session and CSRF tokens.",
+  "permissions": [
+    "cookies"
+  ],
+  "host_permissions": [
+    "https://leetcode.com/"
+  ],
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "service_worker": "background.js"
   }
 }
