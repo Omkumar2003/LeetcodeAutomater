@@ -3,197 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LeetCode Auto Submission Script</title>
-    <link rel="stylesheet" href="index.css">
+    <title>LeetCode Automater - Landing Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .description {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+        
+        .description h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        
+        .description ul {
+            list-style-position: inside;
+            margin-left: 1rem;
+        }
+        
+        .description li {
+            margin: 0.5rem 0;
+        }
+        
+        .download-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .download-section h2 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+        
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .download-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            border-radius: 10px;
+            color: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .download-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .download-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .download-card p {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 0.8rem 2rem;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            background: #f0f0f0;
+            transform: scale(1.05);
+        }
+        
+        .instructions {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .instructions h2 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+        }
+        
+        .instructions ol {
+            margin-left: 2rem;
+        }
+        
+        .instructions li {
+            margin: 1rem 0;
+            line-height: 1.8;
+        }
+        
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+        
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                <span class="logo-icon">LC</span>
-                <span class="logo-text">LeetCode Automator</span>
-            </div>
-            <div class="nav-links">
-                <a href="#home">Home</a>
-                <a href="#features">Features</a>
-                <a href="#how-it-works">How it Works</a>
-            </div>
-            <a href="https://github.com/Omkumar2003/LeetcodeAutomater/releases/tag/1.01" class="nav-btn">Get Started</a>
+    <div class="container">
+        <header>
+            <h1>🚀 LeetCode Automater</h1>
+            <p class="subtitle">Automate Your LeetCode Submissions Effortlessly</p>
+        </header>
+        
+        <div class="description">
+            <h2>About the Project</h2>
+            <p>LeetCode Automater is a powerful Node.js-based automation tool designed to streamline your LeetCode practice workflow. This project helps you:</p>
+            <ul>
+                <li>Automatically fetch your solved LeetCode problems using GraphQL queries</li>
+                <li>Submit Java solutions to LeetCode using your authenticated session</li>
+                <li>Skip premium-only and database-only questions intelligently</li>
+                <li>Track your submission progress with detailed logging</li>
+                <li>Extract LeetCode tokens easily with the Chrome extension</li>
+            </ul>
         </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-container">
-            <div class="hero-content">
-                <h1>Your Ultimate<br>LeetCode Auto Submission Script</h1>
-                <p class="hero-subtitle">Automatically fetch, retrieve, and submit your solved LeetCode problems with Java solutions using your authenticated session</p>
-                <a href="https://github.com/Omkumar2003/LeetcodeAutomater/releases/tag/1.01" class="cta-button">Get Started Now</a>
-                <div class="user-info">
-                    <span class="star-icon">★</span>
-                    <span>Loved by our users</span>
-                    <div class="user-avatars">
-                        <div class="avatar">A</div>
-                        <div class="avatar">K</div>
-                        <div class="avatar">S</div>
-                        <div class="avatar">P</div>
-                    </div>
+        
+        <div class="download-section">
+            <h2>📥 Download Options</h2>
+            <div class="download-grid">
+                <div class="download-card">
+                    <h3>🔌 Chrome Extension</h3>
+                    <p>Install the Chrome extension to easily extract your LeetCode session and CSRF tokens. Simply install the extension, visit LeetCode, and click the extension icon to get your tokens.</p>
+                    <a href="https://github.com/Omkumar2003/LeetcodeAutomater/releases/download/1.01/LeetCode-Token-Viewer.zip" class="download-btn">Download Extension</a>
                 </div>
-            </div>
-            <div class="hero-image">
-                <div class="image-card">
-                    <div class="card-icon">LC</div>
-                    <h3>Get automated submissions with LeetCode Automator</h3>
-                    <p class="card-description">Upload your session and CSRF token to automate submissions from your personal automation script</p>
-                    <div class="feature-grid">
-                        <div class="feature-item">
-                            <span class="feature-icon">📊</span>
-                            <div>
-                                <h4>Auto Fetch</h4>
-                                <p>Fetch solved problems automatically</p>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">⚡</span>
-                            <div>
-                                <h4>Quick Submit</h4>
-                                <p>Submit solutions instantly</p>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">📈</span>
-                            <div>
-                                <h4>Track Progress</h4>
-                                <p>Monitor submission progress</p>
-                            </div>
-                        </div>
-                    </div>
+                
+                <div class="download-card">
+                    <h3>📦 Full Project (Source Code)</h3>
+                    <p>Download the complete project source code. Currently, there is no standalone .exe available. Download the full project to run the automation script on your machine.</p>
+                    <a href="https://github.com/Omkumar2003/LeetcodeAutomater/archive/refs/tags/1.01.zip" class="download-btn">Download ZIP</a>
+                </div>
+                
+                <div class="download-card">
+                    <h3>🔗 Visit Releases Page</h3>
+                    <p>Visit the official releases page to view all available downloads, release notes, and version history. Get the latest updates and improvements.</p>
+                    <a href="https://github.com/Omkumar2003/LeetcodeAutomater/releases" class="download-btn">View Releases</a>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- What Is Section -->
-    <section class="what-is-section" id="features">
-        <div class="what-is-container">
-            <div class="what-is-image">
-                <img src="leet1.jpg" alt="LeetCode Automator Demo" >
+        
+        <div class="instructions">
+            <h2>🛠️ How to Run the Project</h2>
+            <div class="note">
+                <strong>Note:</strong> A standalone .exe file is not currently available. Please follow these steps to run the project from source.
             </div>
-            <div class="what-is-content">
-                <h2>What Is LeetCode Automator and How Does It Work?</h2>
-                <p class="what-is-description">LeetCode Automator is an advanced Node.js script designed to simplify your LeetCode submission workflow. Whether you're maintaining your profile, bulk submitting solutions, or automating your coding practice, this tool provides:</p>
-                <ul class="feature-list">
-                    <li><strong>Instant Automation:</strong> Fetch and submit solutions in seconds</li>
-                    <li><strong>Smart Filtering:</strong> Automatically skips premium-only & DB-only questions</li>
-                    <li><strong>Versatile Functionality:</strong> From GraphQL queries to direct submissions</li>
-                    <li><strong>24/7 Availability:</strong> Always ready to assist you, anytime, anywhere</li>
-                </ul>
-            </div>
+            <ol>
+                <li><strong>Download the Project:</strong> Download the source code ZIP file from the releases page or clone the repository using Git.</li>
+                <li><strong>Extract the Files:</strong> Unzip the downloaded file to your preferred location.</li>
+                <li><strong>Install Node.js:</strong> Make sure you have Node.js installed on your system. You can download it from <a href="https://nodejs.org/" target="_blank">nodejs.org</a>.</li>
+                <li><strong>Install Dependencies:</strong> Open a terminal/command prompt in the project directory and run:<br><code>npm install</code></li>
+                <li><strong>Get Your Tokens:</strong> Use the Chrome extension to extract your LeetCode session and CSRF tokens.</li>
+                <li><strong>Configure the Script:</strong> Add your session and CSRF tokens to the configuration file as instructed in the README.</li>
+                <li><strong>Run the Script:</strong> Execute the automation script with:<br><code>node ok.js</code></li>
+            </ol>
         </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section class="how-it-works" id="how-it-works">
-        <div class="how-container">
-            <h2>Automate. Submit. Excel.</h2>
-            <p class="section-subtitle">LeetCode Automator is an advanced script designed to simplify automated submissions and help you maintain your LeetCode profile effortlessly.</p>
-            
-            <div class="steps-grid" id="download">
-                <div class="step-card">
-                    <div class="step-number">01</div>
-                    <div class="step-icon-wrapper">
-                        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                        </svg>
-                    </div>
-                    <h3>Get Chrome Extension</h3>
-                    <p>Download and install the Chrome extension to easily fetch your LeetCode session and CSRF tokens</p>
-                    <a href="https://github.com/Omkumar2003/LeetcodeAutomater/releases/tag/1.01" class="step-button">Download Extension</a>
-                </div>
-
-                <div class="step-card">
-                    <div class="step-number">02</div>
-                    <div class="step-icon-wrapper">
-                        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                    </div>
-                    <h3>Get Desktop Application</h3>
-                    <p>Download the standalone executable for Windows to run automated submissions directly on your machine</p>
-                    <a href="https://github.com/Omkumar2003/LeetcodeAutomater/releases/tag/1.01" class="step-button">Download .exe</a>
-                </div>
-
-                <div class="step-card">
-                    <div class="step-number">03</div>
-                    <div class="step-icon-wrapper">
-                        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
-                        </svg>
-                    </div>
-                    <h3>Run the Full Project</h3>
-                    <p>Get the complete source code, install dependencies, configure your tokens, and run the automation script locally</p>
-                    <a href="https://github.com/Omkumar2003/LeetcodeAutomater" class="step-button">Download Project</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <!-- <section class="features-section">
-        <div class="features-container">
-            <h2>Key Features</h2>
-            <div class="features-grid">
-                <div class="feature-box">
-                    <h3>GraphQL Integration</h3>
-                    <p>Fetches your solved LeetCode problems using GraphQL queries</p>
-                </div>
-                <div class="feature-box">
-                    <h3>Smart Filtering</h3>
-                    <p>Automatically skips premium-only & DB-only questions</p>
-                </div>
-                <div class="feature-box">
-                    <h3>Java Solutions</h3>
-                    <p>Extracts Java solutions from merged_output.json</p>
-                </div>
-                <div class="feature-box">
-                    <h3>Auto Submission</h3>
-                    <p>Submits code to LeetCode automatically using your session</p>
-                </div>
-                <div class="feature-box">
-                    <h3>Progress Tracking</h3>
-                    <p>Logs skipped/unsubmitted questions and tracks progress</p>
-                </div>
-                <div class="feature-box">
-                    <h3>Chrome Extension</h3>
-                    <p>Easy token extraction with our dedicated Chrome extension</p>
-                </div>
-            </div>
-        </div>
-    </section> -->
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <span class="logo-icon">LC</span>
-                    <span class="logo-text">LeetCode Automator</span>
-                </div>
-                <p>Automate your LeetCode submissions effortlessly</p>
-            </div>
-            <div class="footer-links">
-                <a href="https://github.com/Omkumar2003/LeetcodeAutomater">GitHub</a>
-                <a href="https://github.com/Omkumar2003/LeetcodeAutomater/releases/tag/1.01">Releases</a>
-            </div>
-        </div>
-    </footer>
+        
+        <footer>
+            <p>Made with ❤️ for the LeetCode Community</p>
+            <p><a href="https://github.com/Omkumar2003/LeetcodeAutomater" target="_blank">View on GitHub</a> | <a href="https://github.com/Omkumar2003/LeetcodeAutomater/releases" target="_blank">Releases</a></p>
+        </footer>
+    </div>
 </body>
 </html>
