@@ -3,242 +3,334 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LeetCode Automater - Landing Page</title>
+    <title>LeetCode Automater - Automate Your LeetCode Journey</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --bg-light: #f8fafc;
+            --bg-dark: #1a202c;
+            --text-light: #2d3748;
+            --text-dark: #f7fafc;
+            --card-light: #ffffff;
+            --card-dark: #2d3748;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            transition: all 0.3s ease;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        .light-theme {
+            background: var(--bg-light);
+            color: var(--text-light);
         }
+        
+        .dark-theme {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+        
+        .theme-toggle:hover { transform: scale(1.05); }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         
         header {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            margin-bottom: 2rem;
             text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            margin-bottom: 3rem;
         }
         
-        h1 {
-            color: #667eea;
-            font-size: 2.5rem;
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
             margin-bottom: 1rem;
+            font-weight: 700;
         }
         
-        .subtitle {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 1rem;
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
         }
         
-        .description {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin: 2rem 0;
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
         }
         
-        .description h2 {
-            color: #667eea;
-            margin-bottom: 1rem;
-        }
-        
-        .description ul {
-            list-style-position: inside;
-            margin-left: 1rem;
-        }
-        
-        .description li {
-            margin: 0.5rem 0;
-        }
-        
-        .download-section {
-            background: rgba(255, 255, 255, 0.95);
+        .feature {
+            background: var(--card-light);
             padding: 2rem;
-            border-radius: 15px;
-            margin: 2rem 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.3s ease;
         }
         
-        .download-section h2 {
-            color: #667eea;
+        .dark-theme .feature { background: var(--card-dark); }
+        
+        .feature:hover { transform: translateY(-5px); }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .downloads {
             text-align: center;
-            margin-bottom: 2rem;
-            font-size: 2rem;
+            margin: 4rem 0;
         }
         
         .download-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
-            margin-top: 2rem;
-        }
-        
-        .download-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 2rem;
-            border-radius: 10px;
-            color: white;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .download-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-        }
-        
-        .download-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .download-card p {
-            margin-bottom: 1.5rem;
-            opacity: 0.9;
+            margin: 2rem 0;
         }
         
         .download-btn {
             display: inline-block;
-            background: white;
-            color: #667eea;
-            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 2rem;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 50px;
             font-weight: bold;
             transition: all 0.3s ease;
+            box-shadow: var(--shadow);
         }
         
         .download-btn:hover {
-            background: #f0f0f0;
-            transform: scale(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
         }
         
-        .instructions {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
-            border-radius: 15px;
+        .tutorial {
+            background: var(--card-light);
+            border-radius: 12px;
+            padding: 3rem;
+            margin: 3rem 0;
+            box-shadow: var(--shadow);
+        }
+        
+        .dark-theme .tutorial { background: var(--card-dark); }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
             margin: 2rem 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            gap: 1rem;
         }
         
-        .instructions h2 {
-            color: #667eea;
-            margin-bottom: 1.5rem;
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
         }
         
-        .instructions ol {
-            margin-left: 2rem;
-        }
-        
-        .instructions li {
-            margin: 1rem 0;
-            line-height: 1.8;
-        }
-        
-        .note {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
+        .code {
+            background: #2d3748;
+            color: #e2e8f0;
             padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
             margin: 1rem 0;
-            border-radius: 5px;
         }
         
         footer {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
-            border-radius: 15px;
             text-align: center;
-            margin-top: 2rem;
+            padding: 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid #e2e8f0;
         }
         
-        footer a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: bold;
-        }
+        .dark-theme footer { border-color: #4a5568; }
         
-        footer a:hover {
-            text-decoration: underline;
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            header { padding: 2rem 0; }
+            .hero h1 { font-size: 2.5rem; }
+            .step { flex-direction: column; }
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header>
+<body class="light-theme">
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙 Dark</button>
+    
+    <header>
+        <div class="hero">
             <h1>🚀 LeetCode Automater</h1>
-            <p class="subtitle">Automate Your LeetCode Submissions Effortlessly</p>
-        </header>
-        
-        <div class="description">
-            <h2>About the Project</h2>
-            <p>LeetCode Automater is a powerful Node.js-based automation tool designed to streamline your LeetCode practice workflow. This project helps you:</p>
-            <ul>
-                <li>Automatically fetch your solved LeetCode problems using GraphQL queries</li>
-                <li>Submit Java solutions to LeetCode using your authenticated session</li>
-                <li>Skip premium-only and database-only questions intelligently</li>
-                <li>Track your submission progress with detailed logging</li>
-                <li>Extract LeetCode tokens easily with the Chrome extension</li>
-            </ul>
+            <p>Automate your LeetCode submissions effortlessly with our powerful Chrome extension and executable tool</p>
         </div>
+    </header>
+    
+    <div class="container">
+        <section class="features">
+            <div class="feature">
+                <span class="feature-icon">🔄</span>
+                <h3>Automatic Submissions</h3>
+                <p>Submit your Java solutions directly to LeetCode with intelligent automation</p>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🎯</span>
+                <h3>Smart Filtering</h3>
+                <p>Automatically skip premium-only and database-based problems</p>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">📊</span>
+                <h3>Progress Tracking</h3>
+                <p>Track submissions with detailed progress.json and skipped.log files</p>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🔐</span>
+                <h3>Secure Token Extraction</h3>
+                <p>Use our Chrome extension to safely get your LeetCode session tokens</p>
+            </div>
+        </section>
         
-        <div class="download-section">
-            <h2>📥 Download Options</h2>
+        <section class="downloads">
+            <h2>📥 Get Started - Choose Your Option</h2>
             <div class="download-grid">
-                <div class="download-card">
+                <div>
+                    <h3>💻 Windows Executable</h3>
+                    <p>Ready-to-use executable file</p>
+                    <a href="https://github.com/Omkumar2003/LeetcodeAutomater/releases/download/1.04/LeetcodeAutomater.exe" class="download-btn">Download EXE</a>
+                </div>
+                <div>
                     <h3>🔌 Chrome Extension</h3>
-                    <p>Install the Chrome extension to easily extract your LeetCode session and CSRF tokens. Simply install the extension, visit LeetCode, and click the extension icon to get your tokens.</p>
-                    <a href="https://github.com/Omkumar2003/LeetcodeAutomater/releases/download/1.01/LeetCode-Token-Viewer.zip" class="download-btn">Download Extension</a>
+                    <p>Extract LeetCode tokens easily</p>
+                    <a href="https://github.com/Omkumar2003/LeetcodeAutomater/releases/download/1.04/LeetCode-Token-Viewer.zip" class="download-btn">Download Extension</a>
                 </div>
-                
-                <div class="download-card">
-                    <h3>📦 Full Project (Source Code)</h3>
-                    <p>Download the complete project source code. Currently, there is no standalone .exe available. Download the full project to run the automation script on your machine.</p>
-                    <a href="https://github.com/Omkumar2003/LeetcodeAutomater/archive/refs/tags/1.01.zip" class="download-btn">Download ZIP</a>
-                </div>
-                
-                <div class="download-card">
-                    <h3>🔗 Visit Releases Page</h3>
-                    <p>Visit the official releases page to view all available downloads, release notes, and version history. Get the latest updates and improvements.</p>
-                    <a href="https://github.com/Omkumar2003/LeetcodeAutomater/releases" class="download-btn">View Releases</a>
+                <div>
+                    <h3>📂 Source Code</h3>
+                    <p>Run from source with Node.js</p>
+                    <a href="https://github.com/Omkumar2003/LeetcodeAutomater/archive/refs/heads/main.zip" class="download-btn">Download Source</a>
                 </div>
             </div>
-        </div>
+        </section>
         
-        <div class="instructions">
-            <h2>🛠️ How to Run the Project</h2>
-            <div class="note">
-                <strong>Note:</strong> A standalone .exe file is not currently available. Please follow these steps to run the project from source.
+        <section class="tutorial">
+            <h2>🛠️ Step-by-Step Tutorial</h2>
+            
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>
+                    <h3>Download & Install Chrome Extension</h3>
+                    <p>Download the extension ZIP file and extract it. Then:</p>
+                    <div class="code">1. Open Chrome → chrome://extensions
+2. Enable Developer Mode (top-right)
+3. Click "Load unpacked"
+4. Select the LeetCode-Token-Viewer folder</div>
+                </div>
             </div>
-            <ol>
-                <li><strong>Download the Project:</strong> Download the source code ZIP file from the releases page or clone the repository using Git.</li>
-                <li><strong>Extract the Files:</strong> Unzip the downloaded file to your preferred location.</li>
-                <li><strong>Install Node.js:</strong> Make sure you have Node.js installed on your system. You can download it from <a href="https://nodejs.org/" target="_blank">nodejs.org</a>.</li>
-                <li><strong>Install Dependencies:</strong> Open a terminal/command prompt in the project directory and run:<br><code>npm install</code></li>
-                <li><strong>Get Your Tokens:</strong> Use the Chrome extension to extract your LeetCode session and CSRF tokens.</li>
-                <li><strong>Configure the Script:</strong> Add your session and CSRF tokens to the configuration file as instructed in the README.</li>
-                <li><strong>Run the Script:</strong> Execute the automation script with:<br><code>node ok.js</code></li>
-            </ol>
-        </div>
-        
-        <footer>
-            <p>Made with ❤️ for the LeetCode Community</p>
-            <p><a href="https://github.com/Omkumar2003/LeetcodeAutomater" target="_blank">View on GitHub</a> | <a href="https://github.com/Omkumar2003/LeetcodeAutomater/releases" target="_blank">Releases</a></p>
-        </footer>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>
+                    <h3>Get Your Merge Token</h3>
+                    <p>Log into LeetCode, then use the extension to get your token:</p>
+                    <div class="code">1. Make sure you're logged into LeetCode
+2. Click the Chrome Extension icon
+3. Click "Copy Merge Token"
+4. Save this token for the next step</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>
+                    <h3>Choose Your Method</h3>
+                    <p><strong>Option A: Use the EXE (Windows)</strong></p>
+                    <div class="code">1. Download LeetcodeAutomater.exe
+2. Run the executable
+3. Paste your Merge Token when prompted
+4. Let it automate your submissions!</div>
+                    
+                    <p><strong>Option B: Run from Source</strong></p>
+                    <div class="code">git clone https://github.com/Omkumar2003/LeetcodeAutomater.git
+cd LeetcodeAutomater
+node ok.js</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">4</div>
+                <div>
+                    <h3>Monitor Progress</h3>
+                    <p>The tool will create progress files to track your submissions:</p>
+                    <div class="code">📁 progress.json - Tracks successful submissions
+📁 skipped.log - Lists skipped questions with reasons</div>
+                </div>
+            </div>
+        </section>
     </div>
+    
+    <footer>
+        <p>Made with ❤️ for the LeetCode Community | <a href="https://github.com/Omkumar2003/LeetcodeAutomater" target="_blank">View on GitHub</a></p>
+    </footer>
+    
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const toggle = document.getElementById('themeToggle');
+            
+            if (body.classList.contains('light-theme')) {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+                toggle.textContent = '☀️ Light';                    
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+                toggle.textContent = '🌙 Dark';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // Load saved theme
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const toggle = document.getElementById('themeToggle');
+            
+            if (savedTheme === 'dark') {
+                document.body.classList.remove('light-theme');
+                document.body.classList.add('dark-theme');
+                toggle.textContent = '☀️ Light';
+            }
+        });
+    </script>
 </body>
 </html>
