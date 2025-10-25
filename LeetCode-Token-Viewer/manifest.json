@@ -3,7 +3,7 @@
   "description": "Merge your LeetCode session and CSRF token",
   "version": "1.0",
   "manifest_version": 3,
-  "permissions": ["cookies", "activeTab", "scripting"],
+  "permissions": ["cookies", "activeTab", "scripting","storage"],
   "host_permissions": ["https://leetcode.com/*"],
   "action": {
     "default_popup": "popup.html",
