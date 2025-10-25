@@ -2,6 +2,65 @@ const fs = require("fs");
 const path = require("path");
 const readline = require('readline');
 const mergedData = require('./merged_output.json'); //require loads at compile time ...fs loads in runtime
+// Run if called directly
+if (require.main === module) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  const ask = (question) =>
+    new Promise((resolve) => rl.question(question, (answer) => resolve(answer.trim())));
+
+  const getMergeTokens = async (maxAttempts = 5) => {
+    let attempt = 0;
+
+    while (attempt < maxAttempts) {
+      attempt++;
+      const input = await ask(
+        `To get Merge Token, use the project Chrome extension.\nEnter Merge Token (Attempt ${attempt}/${maxAttempts}): `
+      );
+
+      if (!input) {
+        console.warn("⚠️ No input provided. Please enter a valid Merge Token.");
+        continue;
+      }
+
+      try {
+        const obj1 = decodeString(input);
+        const obj2 = decodeString(input.substr(obj1.nextIndex));
+
+        if (!obj1.originalStr || !obj2.originalStr) {
+          throw new Error("Decoded token is empty");
+        }
+
+        console.log("✅ Merge Token successfully parsed.");
+        return { session: obj1.originalStr, csrf: obj2.originalStr };
+      } catch (err) {
+        console.error(`❌ Invalid token format. ${err.message}`);
+      }
+    }
+
+    throw new Error("Maximum attempts reached. Merge Token setup failed.");
+  };
+
+  (async () => {
+    try {
+      const tokens = await getMergeTokens();
+      CONFIG.LEETCODE_SESSION = tokens.session;
+      CONFIG.CSRFTOKEN = tokens.csrf;
+
+      rl.close();
+
+      const submitter = new LeetCodeSubmitter();
+      await submitter.run();
+    } catch (err) {
+      rl.close();
+      console.error(`❌ ${err.message}`);
+      process.exit(1);
+    }
+  })();
+}
 
 // Configuration
 const CONFIG = {
