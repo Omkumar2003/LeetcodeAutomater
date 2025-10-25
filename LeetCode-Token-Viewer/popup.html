@@ -1,73 +1,211 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>LeetCode Token Viewer</title>
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
       body {
-        font-family: "Segoe UI", sans-serif;
-        background: #f5f7fa;
+        font-family: "Share Tech Mono", monospace;
         margin: 0;
         padding: 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 280px;
+        width: 320px;
+        transition: background 0.3s ease, color 0.3s ease;
+      }
+
+      /* === DARK THEME === */
+      body.dark {
+        background: radial-gradient(circle at top, #0a0a0a 0%, #000 100%);
+        color: #00ff9d;
+      }
+
+      body.dark h1, body.dark .token-box, body.dark {
+        color: #00ff9d;
+      }
+
+      /* === LIGHT THEME === */
+      body.light {
+        background: #f7f7f7;
+        color: #004422;
+      }
+
+      body.light h1, body.light .token-box, body.light {
+        color: #004422;
       }
 
       h1 {
         font-size: 16px;
-        margin-bottom: 10px;
-        color: #333;
+        margin-bottom: 12px;
+        letter-spacing: 1px;
       }
 
       .token-box {
-        background: #fff;
-        border: 1px solid #ccc;
         border-radius: 8px;
         padding: 15px;
         width: 100%;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
         word-break: break-all;
         font-size: 13px;
-        color: #444;
+        min-height: 60px;
+        text-align: center;
+        transition: 0.3s ease;
       }
 
-      .label {
-        font-weight: bold;
-        color: #000;
+      body.dark .token-box {
+        background: rgba(0, 20, 0, 0.85);
+        border: 1px solid #00ff9d33;
+        box-shadow: 0 0 10px #00ff9d33, inset 0 0 6px #00ff9d22;
+      }
+
+      body.light .token-box {
+        background: #fff;
+        border: 1px solid #ccc;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
       }
 
       button {
-        margin-top: 15px;
-        background: #007bff;
-        color: white;
+        margin-top: 12px;
         border: none;
         padding: 8px 12px;
         border-radius: 6px;
         cursor: pointer;
         font-size: 13px;
+        font-weight: bold;
+        letter-spacing: 0.5px;
         transition: 0.2s;
+        color:#004422
+      }
+
+      body.dark button {
+        background: linear-gradient(90deg, #00ff9d, #00cc66);
+        box-shadow: 0 0 8px #00ff9d55;
+      }
+
+      body.light button {
+        background: linear-gradient(90deg, #008b45, #00b96a);
+        box-shadow: 0 0 6px #00b96a55;
       }
 
       button:hover {
-        background: #0056b3;
+        transform: translateY(-1px);
+      }
+
+      #container {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      /* === Toggle Switch === */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 36px;
+        height: 20px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        border-radius: 20px;
+        transition: 0.3s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 14px;
+        width: 14px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        border-radius: 50%;
+        transition: 0.3s;
+      }
+
+      input:checked + .slider {
+        background-color: #00cc66;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(16px);
+      }
+
+      /* === Button Row === */
+      .button-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 12px;
+        width: 100%;
+      }
+
+      .button-row button img.arrow {
+        width: 14px;
+        height: 14px;
+        margin-left: 6px;
+        vertical-align: middle;
+        transition: transform 0.3s ease;
+      }
+
+      .button-row button.active img.arrow {
+        transform: rotate(180deg);
       }
 
       #status {
-        margin-top: 10px;
+        margin-top: 8px;
         font-size: 12px;
-        color: green;
+        text-align: center;
+        opacity: 0.8;
+      }
+
+      #themeLabel {
+        font-size: 12px;
+        margin-left: 6px;
       }
     </style>
   </head>
   <body>
-    <h1>🔐 LeetCode Token Viewer</h1>
+    <div id="container">
+      <h1>LeetCode Token Viewer</h1>
+      <div class="theme-toggle">
+        <label class="switch">
+          <input type="checkbox" id="themeToggle" />
+          <span class="slider"></span>
+        </label>
+        <span id="themeLabel">🌙 Dark</span>
+      </div>
+    </div>
+
     <div id="token" class="token-box">Fetching tokens...</div>
-    <button id="copy">Copy Merge Token</button>
+
+    <!-- ✅ Button row for Show More + Copy -->
+    <div class="button-row">
+      <button id="copy">Copy Merge Token</button>
+    </div>
+
     <div id="status"></div>
 
+    <!-- External JS -->
+    <script src="theme.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>
