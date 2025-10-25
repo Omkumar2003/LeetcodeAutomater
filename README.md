@@ -69,7 +69,7 @@ There are **two options**:
     
     git clone https://github.com/Omkumar2003/LeetcodeAutomater.git
     
-    Inside the repo, find the folder named LeetCode Token Viewer
+    Inside the repo, find the folder named ```LeetCode-Token-Viewer```
 
 **2. Load the Extension in Chrome**
 
@@ -79,7 +79,7 @@ There are **two options**:
 
 - Click **Load unpacked**
 
-- Select the folder LeetCode Token Viewer
+- Select the folder ```LeetCode-Token-Viewer```
 
 **3. Run the Program**
 
@@ -102,7 +102,7 @@ You can run it in **two ways**:
 
 When you run the program, it will prompt for your Merge Token.
 - Make sure you’re **logged into LeetCode** in your browser.
-- Open the **Chrome Extension** → click **Copy Merge Token**.
+- Click the Chrome Extension named ```LeetCode-Token-Viewer``` → click **Copy Merge Token**.
 - **Paste** the token into the program when prompted.
 
 ## ⚙ Executable(.exe) — LeetCode Automater
