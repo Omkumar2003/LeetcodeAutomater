@@ -45,8 +45,8 @@ LeetcodeAutomater
 
 Before you begin, ensure you have the following installed on your system:
 
-- **Node.js** (v14 or higher) - [Download here](https://nodejs.org/)
-- **Google Chrome** browser
+- **Node.js** (optional, You can Simply use the [.exe](https://github.com/Omkumar2003/LeetcodeAutomater/releases/download/1.04/LeetcodeAutomater.exe))- [Download Node.js](https://nodejs.org/)
+- **Chrome Based** browser
 - **LeetCode Account** - Make sure you're logged in to [LeetCode](https://leetcode.com/)
 - **Git** (optional, for cloning the repository)
 
@@ -102,7 +102,7 @@ You can run it in **two ways**:
 
 When you run the program, it will prompt for your Merge Token.
 - Make sure you’re **logged into LeetCode** in your browser.
-- Open the **Chrome Extension** → click *Copy Merge Token.
+- Open the **Chrome Extension** → click **Copy Merge Token**.
 - **Paste** the token into the program when prompted.
 
 ## ⚙ Executable(.exe) — LeetCode Automater
@@ -121,8 +121,6 @@ pkg ok.js --targets node18-win-x64  --output LeetcodeAutomater.exe
 This is how the provided executable [LeetcodeAutomater.exe](https://github.com/Omkumar2003/LeetcodeAutomater/releases/download/1.04/LeetcodeAutomater.exe) was created.
 
 
-## 🔧 Troubleshooting
-
 ### Common Issues and Solutions:
 
 **Issue 1: Extension not loading in Chrome**
@@ -135,26 +133,10 @@ This is how the provided executable [LeetcodeAutomater.exe](https://github.com/O
 - Open the Chrome Extension and click "Copy Merge Token"
 - The token is only valid while you're logged in
 
-**Issue 3: Node.js errors when running from source**
-- Make sure you have Node.js v14 or higher installed
-- Run `npm install -g pkg` before building
-- Check that all dependencies are installed
-
-**Issue 4: Executable not working**
-- Make sure you've extracted the zip file completely
-- On Mac/Linux, you may need to give execution permission: `chmod +x LeetcodeAutomater.exe`
+**Issue 3: Executable not working**
 - Try running from source instead (Option 2)
 
 If you encounter other issues, please [open an issue](https://github.com/Omkumar2003/LeetcodeAutomater/issues) on GitHub.
-
----
-
-# ⭐ Support
-
-If you like this project or found it useful, please consider giving it a ⭐ on GitHub!
-Your support motivates further improvements and updates. 💖
-
----
 
 ## 👥 Contributors
 
@@ -164,7 +146,6 @@ We appreciate all the amazing people who have contributed to this project! 🚀
   <img src="https://contrib.rocks/image?repo=Omkumar2003/LeetcodeAutomater" />
 </a>
 
-Made with [contrib.rocks](https://contrib.rocks).
 
 ### How to Contribute
 
@@ -177,4 +158,3 @@ We welcome contributions! Here's how you can help:
 5. Push to the branch (`git push origin feature/YourFeature`)
 6. Open a Pull Request
 
-Please read our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) before contributing.
