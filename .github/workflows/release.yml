@@ -1,0 +1,42 @@
+name: Build and Release Assets
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install pkg
+        run: npm install -g pkg
+
+      - name: Build Standalone Executable
+        run: pkg ok.js --targets node18-win-x64 --output LeetcodeAutomater.exe
+
+      - name: Zip Chrome Extension
+        run: |
+          cd LeetCode-Token-Viewer
+          zip -r ../LeetcodeAutomater-extension.zip .
+
+      - name: Upload Executable Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LeetcodeAutomater-exe
+          path: LeetcodeAutomater.exe
+
+      - name: Upload Extension Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LeetcodeAutomater-extension
+          path: LeetcodeAutomater-extension.zip
