@@ -7,6 +7,7 @@ const mergedData = require('./merged_output.json'); //require loads at compile t
 const CONFIG = {
   LEETCODE_SESSION: "",
   CSRFTOKEN: "",
+  USERNAME: "", // new: store username from token
   MAX_Q: 3691,
   TARGET_SUCCESS: 1,
   MAX_RANDOM_ATTEMPTS: 4,
@@ -30,12 +31,12 @@ class LeetCodeSubmitter {
     this.cloudflareRejections = 0;
     this.excludeSet = new Set();
     this.HEADERS={
-                  "Content-Type": "application/json",
-                  "Origin": "https://leetcode.com",
-                  "User-Agent": "Mozilla/5.0",
-                  "x-csrftoken": CONFIG.CSRFTOKEN,
-                  "Cookie": `LEETCODE_SESSION=${CONFIG.LEETCODE_SESSION}; csrftoken=${CONFIG.CSRFTOKEN};`
-                };
+      "Content-Type": "application/json",
+      "Origin": "https://leetcode.com",
+      "User-Agent": "Mozilla/5.0",
+      "x-csrftoken": CONFIG.CSRFTOKEN,
+      "Cookie": `LEETCODE_SESSION=${CONFIG.LEETCODE_SESSION}; csrftoken=${CONFIG.CSRFTOKEN};`
+    };
   }
 
   // Utility functions
@@ -85,7 +86,6 @@ class LeetCodeSubmitter {
         headers: this.HEADERS,
         body: JSON.stringify(payload),
       });
-
       return resp.ok ? await resp.json() : null;
     } catch (e) {
       console.error("GraphQL fetch exception:", e.message);
@@ -147,27 +147,24 @@ class LeetCodeSubmitter {
 
     return Array.from(solved);
   }
-
   // Question data extraction
-  async  extractQuestionData(qnum) {
-  try {
-    const data = CONFIG.DATA_FILE; // already parsed JSON
+  async extractQuestionData(qnum) {
+    try {
+      const data = CONFIG.DATA_FILE; 
+      const problem = data.find(p => p.id === qnum);
+      if (!problem) return [null, null];
 
-    const problem = data.find(p => p.id === qnum);
-    if (!problem) return [null, null];
+      const leetcodeUrl = problem.leetcode_url;
+      const walkccUrl = problem.walkcc_url;
 
-    const leetcodeUrl = problem.leetcode_url;
-    const walkccUrl = problem.walkcc_url;
-
-    if (!walkccUrl) return [leetcodeUrl, null];
-
-    const resp = await fetch(walkccUrl, { method: 'GET' });
-    return resp.ok ? [leetcodeUrl, await resp.text()] : [leetcodeUrl, null];
-  } catch (e) {
-    console.error(e);
-    return [null, null];
+      if (!walkccUrl) return [leetcodeUrl, null];
+      const resp = await fetch(walkccUrl, { method: 'GET' });
+      return resp.ok ? [leetcodeUrl, await resp.text()] : [leetcodeUrl, null];
+    } catch (e) {
+      console.error(e);
+      return [null, null];
+    }
   }
-}
 
   // LeetCode submission
   async getQuestionId(slug) {
@@ -187,27 +184,15 @@ class LeetCodeSubmitter {
     try {
       const slug = leetcodeUrl.replace(/\/+$/, "").split("/").pop();
       const questionId = await this.getQuestionId(slug);
-      if (!questionId) {
-        return [400, { error: "Could not fetch questionId" }];
-      }
+      if (!questionId) return [400, { error: "Could not fetch questionId" }];
 
       const url = `https://leetcode.com/problems/${slug}/submit/`;
       const headers = { ...this.HEADERS, Referer: leetcodeUrl };
-      const payload = { 
-        lang: "java", 
-        question_id: String(questionId), 
-        typed_code: code 
-      };
+      const payload = { lang: "java", question_id: String(questionId), typed_code: code };
 
-      const resp = await fetch(url, {
-        method: "POST",
-        headers,
-        body: JSON.stringify(payload),
-      });
-
+      const resp = await fetch(url, { method: "POST", headers, body: JSON.stringify(payload) });
       const respText = await resp.text().catch(() => "");
       
-      // Check for blocking
       if ([403, 429].includes(resp.status) || respText.toLowerCase().includes("cloudflare")) {
         return [resp.status, { error: "Blocked by Cloudflare or rate-limited", raw: respText }];
       }
@@ -228,9 +213,7 @@ class LeetCodeSubmitter {
     let attempts = 0;
     while (attempts < CONFIG.MAX_RANDOM_ATTEMPTS) {
       const qnum = this.randInt(1, CONFIG.MAX_Q);
-      if (!this.excludeSet.has(String(qnum))) {
-        return qnum;
-      }
+      if (!this.excludeSet.has(String(qnum))) return qnum;
       attempts++;
     }
     return null;
@@ -243,15 +226,14 @@ class LeetCodeSubmitter {
     
     // Add solved questions
     this.doneQuestions.forEach(q => this.excludeSet.add(String(q)));
-    
     // Add already successful progress
     Object.entries(this.progress)
-      .filter(([_, success]) => success)
+    Object.entries(this.progress).filter(([_, success]) => success)
       .forEach(([qnum, _]) => this.excludeSet.add(qnum));
   }
 
   // Main execution
- async run() {
+  async run() {
     console.log("🚀 Starting LeetCode Submitter...");
     
     this.loadProgress();
@@ -268,19 +250,11 @@ class LeetCodeSubmitter {
 
     let successCount = 0;
     let totalAttempts = 0;
-    const overallAttemptLimit = CONFIG.OVERALL_ATTEMPT_LIMIT;// defined globaly
 
-    while (successCount < CONFIG.TARGET_SUCCESS && 
-           this.cloudflareRejections < 4 && 
-           totalAttempts < overallAttemptLimit) {
-      
+    while (successCount < CONFIG.TARGET_SUCCESS && this.cloudflareRejections < 4 && totalAttempts < CONFIG.OVERALL_ATTEMPT_LIMIT) {
       totalAttempts++;
       const qnum = this.getRandomQuestion();
-      
-      if (!qnum) {
-        console.log("No eligible question found after many attempts.");
-        break;
-      }
+      if (!qnum) break;
 
       const result = await this.processQuestion(qnum);
       if (result === "SUCCESS") {
@@ -296,35 +270,17 @@ class LeetCodeSubmitter {
     console.log("Press any key to exit...");
     process.stdin.setRawMode(true);
     process.stdin.resume();
-    process.stdin.once('data', () => {
-      process.exit(0);
-    });
-}
-
+    process.stdin.once('data', () => process.exit(0));
+  }
 
   async processQuestion(qnum) {
     console.log(`\n🔎 Attempting question #${qnum}...`);
     const qidStr = String(qnum);
 
     const [leetcodeUrl, code] = await this.extractQuestionData(qnum);
-    
-    if (!leetcodeUrl) {
-      this.logSkip(qnum, "LeetCode URL not found");
-      this.updateProgress(qidStr, false);
-      return "SKIP";
-    }
-
-    if (leetcodeUrl.toLowerCase().includes("premium")) {
-      this.logSkip(qnum, "LeetCode page is premium");
-      this.updateProgress(qidStr, false);
-      return "SKIP";
-    }
-
-    if (!code) {
-      this.logSkip(qnum, "No code found");
-      this.updateProgress(qidStr, false);
-      return "SKIP";
-    }
+    if (!leetcodeUrl) { this.logSkip(qnum, "LeetCode URL not found"); this.updateProgress(qidStr, false); return "SKIP"; }
+    if (leetcodeUrl.toLowerCase().includes("premium")) { this.logSkip(qnum, "LeetCode page is premium"); this.updateProgress(qidStr, false); return "SKIP"; }
+    if (!code) { this.logSkip(qnum, "No code found"); this.updateProgress(qidStr, false); return "SKIP"; }
 
     return await this.submitQuestion(qnum, leetcodeUrl, code, qidStr);
   }
@@ -333,34 +289,26 @@ class LeetCodeSubmitter {
     const [status, respData] = await this.submitToLeetCode(leetcodeUrl, code);
     const respText = JSON.stringify(respData || {});
 
-    // Handle blocking
     if ([403, 429].includes(status) || respText.toLowerCase().includes("cloudflare")) {
       this.cloudflareRejections++;
-      console.warn(`🚫 Cloudflare detected (count ${this.cloudflareRejections}/4)`);/////////number wanted instead of 4 
+      console.warn(`🚫 Cloudflare detected (count ${this.cloudflareRejections}/${CONFIG.OVERALL_ATTEMPT_LIMIT})`);
       this.logSkip(qnum, `blocked (status ${status})`);
       this.updateProgress(qidStr, false);
       return "BLOCKED";
     }
 
-    // Handle submission failure
-    if (status !== 200) {
-      console.error(`❌ Submission failed with status: ${status}`);
-      this.logSkip(qnum, `HTTP status ${status}`);
-      this.updateProgress(qidStr, false);
-      return "FAILED";
-    }
+    if (status !== 200) { this.logSkip(qnum, `HTTP status ${status}`); this.updateProgress(qidStr, false); return "FAILED"; }
 
-    // Check for success
     if (this.isSubmissionSuccessful(respData, respText)) {
-      console.log(`\n📝 Solution for #${qnum}:`);
-      console.log("=".repeat(50));
-      console.log(code);
-      console.log("=".repeat(50));
+      console.log("\n📝 Solution for #"+qnum+":\n"+ "=".repeat(50) + "\n" + code + "\n" + "=".repeat(50));
       console.log(`✅ Submitted successfully for #${qnum}!`);
+
+      // Log profile link
+      if (this.username) console.log(`🔗 Check your LeetCode profile: https://leetcode.com/u/${this.username}/`);
+
       this.updateProgress(qidStr, true);
       return "SUCCESS";
     } else {
-      console.error(`❌ Submission failed for #${qnum}`);
       this.logSkip(qnum, "submission failed");
       this.updateProgress(qidStr, false);
       return "FAILED";
@@ -368,10 +316,7 @@ class LeetCodeSubmitter {
   }
 
   isSubmissionSuccessful(respData, respText) {
-    return (respData?.submission_id || 
-            respData?.submissionId || 
-            respText.includes("submission_id") || 
-            respText.toLowerCase().includes("success"));
+    return respData?.submission_id || respData?.submissionId || respText.includes("submission_id") || respText.toLowerCase().includes("success");
   }
 
   updateProgress(qidStr, success) {
@@ -385,62 +330,51 @@ class LeetCodeSubmitter {
     console.log(`Total attempts: ${totalAttempts}`);
     console.log(`Cloudflare rejections: ${this.cloudflareRejections}`);
     
-    if (this.cloudflareRejections >= 4) {
-      console.warn("⚠️ Aborted due to Cloudflare blocking");
-    } else if (successCount >= CONFIG.TARGET_SUCCESS) {
-      console.log("🎉 Target achieved!");
-    } else {
-      console.log("ℹ️ Finished without achieving target");
-    }
+    if (this.cloudflareRejections >= 4) console.warn("⚠️ Aborted due to Cloudflare blocking");
+    else if (successCount >= CONFIG.TARGET_SUCCESS) console.log("🎉 Target achieved!");
+    else console.log("ℹ️ Finished without achieving target");
     console.log("===========================");
   }
 }
 
-
 function decodeString(encoded) {
   let length = '';
   let i = 0;
-
-  // Extract the length prefix (can be multiple digits)
-  while (!isNaN(encoded[i])) {
-    length += encoded[i];
-    i++;
-  }
+  while (!isNaN(encoded[i])) { length += encoded[i]; i++; }
   length = parseInt(length);
-
-  // Extract the original string based on length
   const originalStr = encoded.substr(i, length);
   return { length, originalStr, nextIndex: i + length };
 }
 
-
-
-
+function decodeJWT(token) {
+  try {
+    const payload = token.split('.')[1]; // JWT = header.payload.signature
+    const decoded = Buffer.from(payload, 'base64').toString('utf8');
+    return JSON.parse(decoded);
+  } catch (e) {
+    return null;
+  }
+}
 
 // Run if called directly
 if (require.main === module) {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
   const ask = (question) => new Promise(resolve => rl.question(question, answer => resolve(answer.trim())));
 
   (async () => {
-   const temp = await ask("To get Merge Token, use the project Chrome extension.\nEnter Merge Token: ");
+    const temp = await ask("To get Merge Token, use the project Chrome extension: https://github.com/Omkumar2003/LeetcodeAutomater/releases/download/1.04/LeetCode-Token-Viewer.zip \nEnter Merge Token: ");
     const obj1 = decodeString(temp);
-    CONFIG.LEETCODE_SESSION= obj1.originalStr;
+    CONFIG.LEETCODE_SESSION = obj1.originalStr;
     const obj2 = decodeString(temp.substr(obj1.nextIndex));
-    CONFIG.CSRFTOKEN= obj2.originalStr;
+    CONFIG.CSRFTOKEN = obj2.originalStr;
 
     rl.close();
 
     const submitter = new LeetCodeSubmitter();
-    try {
-      await submitter.run();
-    } catch (err) {
-      console.error("Unhandled error:", err);
-    }
+    const jwtPayload = decodeJWT(CONFIG.LEETCODE_SESSION);
+submitter.username = jwtPayload?.user_slug || jwtPayload?.username || "yourusername";
+    try { await submitter.run(); } 
+    catch (err) { console.error("Unhandled error:", err); }
   })();
 }
 
